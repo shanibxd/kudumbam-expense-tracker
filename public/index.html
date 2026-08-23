@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kudumbam Expense - Family AI Expense Assistant</title>
+  <!-- Google Fonts: Outfit for premium modern feel -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="app.css">
+</head>
+
+<body>
+
+  <!-- Simulated Mobile Container -->
+  <div class="mobile-viewport">
+
+    <!-- App Header -->
+    <header class="app-header">
+      <div class="header-logo">
+        <div class="logo-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+        </div>
+        <div>
+          <h1>കുടുംബം Expense</h1>
+          <p class="sub-header">Kerala Family AI Assistant</p>
+        </div>
+      </div>
+
+      <!-- Family Member Quick Switcher -->
+      <div class="header-profile" id="headerProfileBtn">
+        <span class="avatar-letter" id="activeMemberAvatar">R</span>
+        <div class="profile-meta">
+          <span class="profile-name" id="activeMemberName">Rajesh (F)</span>
+          <span class="profile-role">Active Member</span>
+        </div>
+        <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </div>
+    </header>
+
+    <!-- Main Screens Viewport -->
+    <main class="app-content" id="appContent">
+
+      <!-- SCREEN 1: HOME/DASHBOARD -->
+      <section id="screen-home" class="app-screen active">
+        <!-- Budget Card -->
+        <div class="card budget-card">
+          <div class="budget-header">
+            <div>
+              <h3>Monthly Budget</h3>
+              <p class="text-muted">Total allocated</p>
+            </div>
+            <div class="budget-amount" id="budgetLimitVal">₹30,000</div>
+          </div>
+
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="budgetProgressFill" style="width: 0%"></div>
+          </div>
+
+          <div class="budget-status-row">
+            <div>
+              <span class="label">Spent</span>
+              <span class="val spent-color" id="budgetSpentVal">₹0</span>
+            </div>
+            <div class="text-center">
+              <span class="label">Remaining</span>
+              <span class="val remaining-color" id="budgetRemainingVal">₹30,000</span>
+            </div>
+            <div class="text-right">
+              <span class="label">Used</span>
+              <span class="val percent-color" id="budgetPercentVal">0%</span>
+            </div>
+          </div>
+
+          <div class="budget-forecast" id="budgetForecastAlert">
+            <div class="forecast-icon">💡</div>
+            <div class="forecast-text" id="budgetForecastText">Estimated end-of-month spending is calculating...</div>
+          </div>
+        </div>
+
+        <!-- Quick Summary Grid -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-icon">📅</span>
+            <div class="stat-info">
+              <span class="stat-label">Today</span>
+              <span class="stat-val" id="todayTotalVal">₹0</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">🗓️</span>
+            <div class="stat-info">
+              <span class="stat-label">This Week</span>
+              <span class="stat-val" id="weekTotalVal">₹0</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">📊</span>
+            <div class="stat-info">
+              <span class="stat-label">This Month</span>
+              <span class="stat-val" id="monthTotalVal">₹0</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">📈</span>
+            <div class="stat-info">
+              <span class="stat-label">Top Category</span>
+              <span class="stat-val text-truncate" id="topCategoryVal">None</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="card chart-card">
+          <h3 class="card-title">Category Spending Distribution</h3>
+          <div class="chart-container">
+            <div class="no-data-msg" id="chartNoData">No expenses recorded for this month yet.</div>
+            <div class="custom-bar-chart" id="categoryChart">
+              <!-- Rendered dynamically via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="recent-transactions-section">
+          <div class="section-header">
+            <h3>Recent Expenses</h3>
+            <button class="btn-text" id="viewAllExpensesBtn">View All</button>
+          </div>
+          <div class="transactions-list" id="recentTransactionsList">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 2: ADD EXPENSE (Interactive modal layout) -->
+      <section id="screen-add" class="app-screen">
+        <div class="add-expense-container">
+          <div class="speech-mic-section">
+            <div class="mic-circle" id="micButton">
+              <div class="pulse-ring"></div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mic-icon">
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                <path d="M19 10v1a7 7 0 0 1-14 0v-1" />
+                <line x1="12" x2="12" y1="19" y2="22" />
+              </svg>
+            </div>
+            <h2 id="micStatusText" class="mic-status">Tap to speak expense</h2>
+            <p class="mic-subtext">Malayalam, Manglish, or English</p>
+          </div>
+
+          <!-- Quick Suggestions Carousel/Chips -->
+          <div class="speech-examples">
+            <p class="example-title">Try saying or typing like this:</p>
+            <div class="example-chips">
+              <button class="chip" data-phrase="Innu petrol 500 roopa">"Innu petrol 500 roopa"</button>
+              <button class="chip" data-phrase="KSEB bill 1800">"KSEB bill 1800"</button>
+              <button class="chip" data-phrase="Supermarket-il 1200 roopa ayi">"Supermarket-il 1200 roopa ayi"</button>
+              <button class="chip" data-phrase="Makan college fees 5000">"Makan college fees 5000"</button>
+              <button class="chip" data-phrase="Innale doctor fees 350">"Innale doctor fees 350"</button>
+              <button class="chip" data-phrase="Hotel oonu 250">"Hotel oonu 250"</button>
+            </div>
+          </div>
+
+          <!-- Natural Language Text Field -->
+          <div class="text-input-section">
+            <div class="nlp-input-wrapper">
+              <input type="text" id="nlpInputField" placeholder="Or type naturally here (e.g. Innu petrol 500)..."
+                autocomplete="off">
+              <button class="nlp-parse-btn" id="nlpParseBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- AI Extracted Preview Area -->
+          <div class="ai-extracted-card card collapsed" id="aiExtractedCard">
+            <div class="ai-header">
+              <span class="ai-badge">🤖 AI Auto-Extracted</span>
+              <button class="ai-close-btn" id="aiCancelBtn">Cancel</button>
+            </div>
+
+            <form id="expenseEditorForm" class="extracted-details-form">
+              <input type="hidden" id="editExpenseId">
+
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="expAmount">Amount (₹)</label>
+                  <input type="number" id="expAmount" required min="0.01" step="any" placeholder="Enter amount">
+                </div>
+                <div class="form-group col-6">
+                  <label for="expCategory">Category</label>
+                  <select id="expCategory" required>
+                    <!-- Populated by JS -->
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="expDate">Date</label>
+                  <input type="date" id="expDate" required>
+                </div>
+                <div class="form-group col-6">
+                  <label for="expMember">Family Member</label>
+                  <select id="expMember" required>
+                    <!-- Populated by JS -->
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="expDescription">Description</label>
+                <input type="text" id="expDescription" placeholder="e.g. Fuel, Lunch, Electricity" required>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn-primary btn-block" id="saveExpenseBtn">Save Expense</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 3: EXPENSE HISTORY -->
+      <section id="screen-history" class="app-screen">
+        <div class="history-controls card">
+          <div class="search-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" x2="16.65" y1="21" y2="16.65" />
+            </svg>
+            <input type="text" id="historySearch" placeholder="Search description or amount...">
+          </div>
+
+          <div class="filter-row">
+            <div class="filter-group">
+              <label for="filterDate">Date Range</label>
+              <select id="filterDate">
+                <option value="all">All Time</option>
+                <option value="today">Today</option>
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label for="filterCategory">Category</label>
+              <select id="filterCategory">
+                <option value="all">All Categories</option>
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label for="filterMember">Member</label>
+              <select id="filterMember">
+                <option value="all">Everyone</option>
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="transactions-list-container">
+          <div class="history-summary">
+            <span id="historyResultsCount">Showing 0 expenses</span>
+            <span class="total-badge" id="historyFilteredTotal">Total: ₹0</span>
+          </div>
+          <div class="transactions-list" id="historyTransactionsList">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 4: AI INSIGHTS -->
+      <section id="screen-insights" class="app-screen">
+        <div class="insights-hero card">
+          <div class="insights-hero-badge">🤖 Smart Suggestions</div>
+          <h2>Kudumban AI Insight</h2>
+          <p>Analyzing family spending habits to keep you in control of your budget.</p>
+        </div>
+
+        <div class="insights-container" id="insightsList">
+          <!-- Dynamic insights cards render here -->
+        </div>
+      </section>
+
+      <!-- SCREEN 5: USER PROFILE & SETTINGS -->
+      <section id="screen-profile" class="app-screen">
+        <!-- Account: logged-in user + logout -->
+        <div class="card settings-card">
+          <h3>👤 My Account</h3>
+          <div class="account-row mt-10">
+            <div class="account-info">
+              <span class="account-name" id="accountName">—</span>
+              <span class="account-email" id="accountEmail">—</span>
+            </div>
+            <button class="btn-outline" id="logoutBtn">Log Out</button>
+          </div>
+        </div>
+
+        <!-- Settings Category: Family Members -->
+        <div class="card settings-card">
+          <div class="settings-header">
+            <h3>👨‍👩‍👧‍👦 Family Members</h3>
+            <button class="btn-text" id="addMemberBtn">+ Add</button>
+          </div>
+          <p class="settings-desc text-muted">Manage family members to log individual contributions.</p>
+          <div class="family-list" id="settingsFamilyList">
+            <!-- Dynamic elements with edit/delete -->
+          </div>
+        </div>
+
+        <!-- Settings Category: Monthly Budget & Category Manager -->
+        <div class="card settings-card">
+          <h3>⚙️ Budget & Categories</h3>
+
+          <form id="settingsBudgetForm" class="settings-form mt-10">
+            <div class="form-group">
+              <label for="settingsBudgetInput">Monthly Family Budget (₹)</label>
+              <div class="input-inline-btn">
+                <input type="number" id="settingsBudgetInput" required min="100">
+                <button type="submit" class="btn-secondary">Update</button>
+              </div>
+            </div>
+          </form>
+
+          <hr class="divider">
+
+          <div class="settings-header">
+            <h4>Custom Categories</h4>
+            <button class="btn-text" id="addCategoryBtn">+ Add New</button>
+          </div>
+          <div class="category-tags-list" id="settingsCategoryList">
+            <!-- Dynamic category pills -->
+          </div>
+        </div>
+
+        <!-- Privacy and Data controls -->
+        <div class="card settings-card">
+          <h3>🔒 Privacy & Security</h3>
+          <p class="settings-desc text-muted">Your financial details never leave this browser. Manage local backups or
+            toggle security locks here.</p>
+
+          <div class="switch-row">
+            <div>
+              <span class="switch-label">Enable PIN Lock</span>
+              <span class="switch-desc text-muted">Protect data when app is opened</span>
+            </div>
+            <label class="switch-toggle">
+              <input type="checkbox" id="pinLockToggle">
+              <span class="slider round"></span>
+            </label>
+          </div>
+
+          <div class="pin-setup-section collapsed" id="pinSetupContainer">
+            <div class="form-group">
+              <label for="securityPinInput">Enter 4-Digit Security PIN</label>
+              <input type="password" id="securityPinInput" maxlength="4" placeholder="••••"
+                style="letter-spacing: 0.5em; text-align: center;">
+            </div>
+          </div>
+
+          <hr class="divider">
+
+          <div class="data-actions-grid">
+            <button class="btn-outline" id="exportDataBtn">📥 Export Data</button>
+            <button class="btn-outline" id="importDataBtn">📤 Import Data</button>
+            <button class="btn-danger btn-block mt-10" id="resetDataBtn">⚠️ Reset App Data</button>
+          </div>
+          <!-- Hidden file input for import -->
+          <input type="file" id="importFileInput" style="display: none;" accept=".json">
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="app-nav">
+      <button class="nav-tab active" data-screen="home">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+        <span>Home</span>
+      </button>
+
+      <button class="nav-tab" data-screen="history">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 20h9" />
+          <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+        </svg>
+        <span>History</span>
+      </button>
+
+      <!-- Center floating Add button -->
+      <button class="nav-tab nav-tab-add" data-screen="add" id="tabAddExpenseBtn">
+        <div class="add-btn-circle">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" x2="12" y1="5" y2="19" />
+            <line x1="5" x2="19" y1="12" y2="12" />
+          </svg>
+        </div>
+      </button>
+
+      <button class="nav-tab" data-screen="insights">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path
+            d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z" />
+        </svg>
+        <span>Insights</span>
+      </button>
+
+      <button class="nav-tab" data-screen="profile">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span>Profile</span>
+      </button>
+    </nav>
+
+    <!-- Pin Code Screen overlay (if lock enabled) -->
+    <div class="pin-lock-overlay" id="pinLockOverlay">
+      <div class="pin-box">
+        <div class="logo-icon-large">
+          <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+        </div>
+        <h2>Kudumbam Expense</h2>
+        <p class="pin-prompt">Enter PIN to access your account</p>
+        <div class="pin-dots">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+        <div class="pin-error-msg" id="pinErrorMsg">Incorrect PIN. Try again.</div>
+        <div class="pin-keyboard">
+          <button class="pin-key" data-val="1">1</button>
+          <button class="pin-key" data-val="2">2</button>
+          <button class="pin-key" data-val="3">3</button>
+          <button class="pin-key" data-val="4">4</button>
+          <button class="pin-key" data-val="5">5</button>
+          <button class="pin-key" data-val="6">6</button>
+          <button class="pin-key" data-val="7">7</button>
+          <button class="pin-key" data-val="8">8</button>
+          <button class="pin-key" data-val="9">9</button>
+          <button class="pin-key btn-clear" id="pinKeyClear">Clear</button>
+          <button class="pin-key" data-val="0">0</button>
+          <button class="pin-key btn-clear" style="visibility: hidden;"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Switch Member Dropdown Modal -->
+    <div class="dropdown-modal-overlay" id="memberDropdownOverlay">
+      <div class="dropdown-modal">
+        <h3>Who is using the app?</h3>
+        <div class="dropdown-members-list" id="dropdownMembersList">
+          <!-- Dynamic dropdown list of members -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>

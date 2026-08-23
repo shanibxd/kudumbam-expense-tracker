@@ -1,0 +1,16 @@
+{
+  "name": "kudumbam-expense-tracker",
+  "version": "2.0.0",
+  "description": "Family Expense Tracker with secure authentication",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "connect-sqlite3": "^0.9.13",
+    "better-sqlite3": "^11.3.0",
+    "bcryptjs": "^2.4.3"
+  }
+}

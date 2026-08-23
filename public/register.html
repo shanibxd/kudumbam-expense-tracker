@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account — Kudumbam Expense</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="app.css">
+</head>
+
+<body>
+  <div class="auth-viewport">
+    <div class="auth-brand">
+      <div class="logo-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+      </div>
+      <div>
+        <h1>കുടുംബം Expense</h1>
+        <p class="sub-header">Kerala Family AI Assistant</p>
+      </div>
+    </div>
+
+    <div class="auth-card">
+      <h2>Create your account</h2>
+      <p class="auth-subtitle">Start tracking your family's expenses securely.</p>
+
+      <div class="auth-banner" id="authBanner"></div>
+
+      <form class="auth-form" id="registerForm" novalidate>
+        <div class="form-group">
+          <label for="regName">Full name</label>
+          <input type="text" id="regName" autocomplete="name" required>
+          <span class="field-error" id="err-name"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="regEmail">Email address</label>
+          <input type="email" id="regEmail" autocomplete="username" required>
+          <span class="field-error" id="err-email"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="regPassword">Password</label>
+          <input type="password" id="regPassword" autocomplete="new-password" required>
+          <span class="field-error" id="err-password"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="regConfirmPassword">Confirm password</label>
+          <input type="password" id="regConfirmPassword" autocomplete="new-password" required>
+          <span class="field-error" id="err-confirmPassword"></span>
+        </div>
+
+        <button type="submit" class="btn-primary btn-block auth-submit-btn" id="registerSubmitBtn">Create
+          Account</button>
+      </form>
+
+      <p class="auth-switch">Already have an account? <a href="/login.html">Log in</a></p>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('registerForm');
+    const banner = document.getElementById('authBanner');
+    const submitBtn = document.getElementById('registerSubmitBtn');
+    const fieldErrIds = ['name', 'email', 'password', 'confirmPassword'];
+
+    function clearErrors() {
+      banner.classList.remove('visible');
+      banner.textContent = '';
+      fieldErrIds.forEach(f => {
+        const el = document.getElementById('err-' + f);
+        if (el) el.textContent = '';
+      });
+    }
+
+    fetch('/api/me').then(r => { if (r.ok) window.location.href = '/'; }).catch(() => {});
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearErrors();
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Creating account...';
+
+      const name = document.getElementById('regName').value;
+      const email = document.getElementById('regEmail').value;
+      const password = document.getElementById('regPassword').value;
+      const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+      try {
+        const res = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password, confirmPassword })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          if (data.fieldErrors) {
+            Object.entries(data.fieldErrors).forEach(([field, msg]) => {
+              const el = document.getElementById('err-' + field);
+              if (el) el.textContent = msg;
+            });
+          }
+          banner.textContent = data.error || 'Registration failed. Please try again.';
+          banner.classList.add('visible');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Create Account';
+          return;
+        }
+
+        window.location.href = '/';
+      } catch (err) {
+        banner.textContent = 'Network error. Please check your connection and try again.';
+        banner.classList.add('visible');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Create Account';
+      }
+    });
+  </script>
+</body>
+
+</html>
