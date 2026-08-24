@@ -1,4 +1,4 @@
-// auth.js — password hashing, validation, and auth middleware helpers
+// auth.js — password hashing, validation, and auth middleware helpers 
 const bcrypt = require('bcryptjs');
 
 const SALT_ROUNDS = 12;
