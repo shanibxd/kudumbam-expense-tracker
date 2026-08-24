@@ -1,4 +1,4 @@
-// Kudumbam Expense - Core Javascript Engine
+// Kudumbam Expense - Core Javascript Engine 
 
 // Helper to get relative date string
 function getFormattedDate(offsetDays = 0) {
