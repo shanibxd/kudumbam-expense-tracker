@@ -1,4 +1,4 @@
-// defaults.js — default categories/members/seed-expenses for a brand-new account
+// defaults.js — default categories/members/seed-expenses for a brand-new account 
 const DEFAULT_CATEGORIES = [
   { id: 'food', name: 'Food', icon: '🍲', color: '#ff7043' },
   { id: 'groceries', name: 'Groceries', icon: '🛒', color: '#42a5f5' },
