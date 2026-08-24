@@ -1,4 +1,4 @@
-// server.js — Kudumbam Expense Tracker
+// server.js — Kudumbam Expense Tracker 
 // Express + PostgreSQL + session-based authentication
 
 require('dotenv').config();
