@@ -1,4 +1,4 @@
-// db.js — PostgreSQL database for Kudumbam Expense Tracker
+// db.js — PostgreSQL database for Kudumbam Expense Tracker 
 
 require('dotenv').config();
 
