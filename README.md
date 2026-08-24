@@ -9,7 +9,7 @@ The application includes **secure registration and login**, with every user's da
 
 ---
 
-## ✨ Specialities
+## ✨ Specialities 
 
 ### 🔐 Secure User Authentication
 
